@@ -2,18 +2,17 @@ tags:
   - Water
 summary: Delete a water intake record
 operationId: deleteWater
-description: "Delete a water intake record based on the provided date"
+description: "Delete a water intake record by ID"
 security:
   - bearerAuth: []
 parameters:
   - in: path
-    name: date
+    name: waterId
     required: true
     schema:
       type: string
-      format: date
-      example: "2024-09-01T14:00"
-    description: "The date of the water intake record to delete"
+      example: "66785ee7009eeec396e0e546"
+    description: "The ID of the water intake record to delete"
 responses:
   "200":
     description: "Successfully deleted the water intake record"

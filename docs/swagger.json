@@ -56,48 +56,13 @@
                     "type": "string",
                     "format": "email",
                     "example": "user@example.com",
-                    "description": "The user's email address"
+                    "description": "The user's email address. Must be unique."
                   },
                   "password": {
                     "type": "string",
                     "format": "password",
                     "example": "password123",
-                    "description": "The user's password"
-                  },
-                  "name": {
-                    "type": "string",
-                    "example": "John Doe",
-                    "description": "The user's name"
-                  },
-                  "photo": {
-                    "type": "string",
-                    "format": "uri",
-                    "example": "https://example.com/photo.jpg",
-                    "description": "URL of the user's profile picture"
-                  },
-                  "gender": {
-                    "type": "string",
-                    "enum": [
-                      "woman",
-                      "man"
-                    ],
-                    "example": "woman",
-                    "description": "The user's gender"
-                  },
-                  "waterAmount": {
-                    "type": "number",
-                    "example": 1.5,
-                    "description": "The user's daily water intake goal in liters"
-                  },
-                  "weight": {
-                    "type": "number",
-                    "example": 70,
-                    "description": "The user's weight in kilograms"
-                  },
-                  "sportHours": {
-                    "type": "number",
-                    "example": 2,
-                    "description": "The user's weekly sport activity in hours"
+                    "description": "The user's password. Must be 8 to 64 symbols."
                   }
                 }
               }
@@ -349,7 +314,7 @@
         }
       }
     },
-    "/user/avatar": {
+    "/users/avatar": {
       "put": {
         "tags": [
           "User"
@@ -423,7 +388,7 @@
         }
       }
     },
-    "/user/infoCurrentUser": {
+    "/users/userInfo": {
       "get": {
         "tags": [
           "User"
@@ -478,7 +443,7 @@
         }
       }
     },
-    "/user/updateUser": {
+    "/users": {
       "patch": {
         "tags": [
           "User"
@@ -657,14 +622,14 @@
         }
       }
     },
-    "/water/{date}": {
+    "/water/{waterId}": {
       "patch": {
         "tags": [
           "Water"
         ],
         "summary": "Update a water intake record",
         "operationId": "patchWater",
-        "description": "Update a water intake record by date",
+        "description": "Update a water intake record by ID",
         "security": [
           {
             "bearerAuth": []
@@ -673,14 +638,13 @@
         "parameters": [
           {
             "in": "path",
-            "name": "date",
+            "name": "waterId",
             "schema": {
               "type": "string",
-              "format": "date",
-              "example": "2024-09-01T14:00"
+              "example": "66785ee7009eeec396e0e546"
             },
             "required": true,
-            "description": "The date of the record to update"
+            "description": "The ID of the water intake record to update"
           }
         ],
         "requestBody": {
@@ -746,7 +710,7 @@
         ],
         "summary": "Delete a water intake record",
         "operationId": "deleteWater",
-        "description": "Delete a water intake record based on the provided date",
+        "description": "Delete a water intake record by ID",
         "security": [
           {
             "bearerAuth": []
@@ -755,14 +719,13 @@
         "parameters": [
           {
             "in": "path",
-            "name": "date",
+            "name": "waterId",
             "required": true,
             "schema": {
               "type": "string",
-              "format": "date",
-              "example": "2024-09-01T14:00"
+              "example": "66785ee7009eeec396e0e546"
             },
-            "description": "The date of the water intake record to delete"
+            "description": "The ID of the water intake record to delete"
           }
         ],
         "responses": {
