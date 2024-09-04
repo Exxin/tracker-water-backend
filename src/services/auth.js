@@ -2,7 +2,7 @@ import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
 import randomBytes from "randombytes";
 
-import { UsersCollection } from "../db/models/users.js";
+import { UserAuth } from "../db/models/userAuth.js";
 import { Session } from "../db/models/session.js";
 import { ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL } from "../constants/index.js";
 
@@ -19,17 +19,17 @@ function createSession() {
 }
 
 export async function registerUser(payload) {
-  const user = await UsersCollection.findOne({ email: payload.email });
+  const user = await UserAuth.findOne({ email: payload.email });
   if (user) throw createHttpError(409, "Email in use");
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
-  return await UsersCollection.create({
+  return await UserAuth.create({
     ...payload,
     password: encryptedPassword,
   });
 }
 
 export async function loginUser(payload) {
-  const user = await UsersCollection.findOne({ email: payload.email });
+  const user = await UserAuth.findOne({ email: payload.email });
   if (!user) throw createHttpError(404, "User not found");
   const isMatch = await bcrypt.compare(payload.password, user.password);
   if (!isMatch) throw createHttpError(401, "Unauthorized");
@@ -47,14 +47,14 @@ export async function refreshUsersSession({ sessionId, refreshToken }) {
     refreshToken,
   });
   if (session === null) {
-    throw createHttpError(401, 'Session not found');
+    throw createHttpError(401, "Session not found");
   }
 
   const isSessionTokenExpired =
     new Date() > new Date(session.refreshTokenValidUntil);
 
   if (isSessionTokenExpired) {
-    throw createHttpError(401, 'Session token expired');
+    throw createHttpError(401, "Session token expired");
   }
 
   const newSession = createSession();
@@ -67,5 +67,5 @@ export async function refreshUsersSession({ sessionId, refreshToken }) {
 }
 
 export async function logoutUser({ sessionId, refreshToken }) {
-    await Session.deleteOne({ _id: sessionId, refreshToken });
-  }
+  await Session.deleteOne({ _id: sessionId, refreshToken });
+}
